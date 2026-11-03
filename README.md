@@ -1,6 +1,6 @@
 # Barless
 
-Arc Browser のコマンドバーに着想を得た、Chrome / Brave 向けタブ切り替え・検索パレット拡張機能。
+Arc Browser のコマンドバーに着想を得た、Chrome / Brave 向けタブ切り替え・検索パレット拡張機能です。
 
 <p align="center">
   <img src="images/hero-search.png" alt="Barless - タブ検索とWeb検索の統合パレット" width="800">
@@ -28,7 +28,7 @@ Arc Browser に着想を得た統合パレットを画面中央に呼び出し�
 
 ### 3. 9スロット一覧と数字キージャンプ
 
-パレットを開くと直近のタブが9件ずつ一覧表示されます。数字キー `1`〜`9` またはクリックで対象のタブへ直接移動できます。
+パレットを開くと、開いているタブが左から順に9件ずつ一覧表示されます。数字キー `1`〜`9` またはクリックで対象のタブへ直接移動できます。
 
 <p align="center">
   <img src="images/hero-slots.png" alt="9スロット一覧と数字キージャンプ" width="800">
