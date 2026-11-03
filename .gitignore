@@ -8,3 +8,10 @@ AGENTS.md
 
 # Internal Development & Planning Docs
 docs_internal/
+
+# Recording & Media Assets (Private)
+movie/
+*.mov
+*.mp4
+*.webm
+
