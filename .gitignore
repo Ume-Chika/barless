@@ -1,0 +1,10 @@
+.DS_Store
+*.zip
+dist/
+
+# Local AI Agent & Skills
+.agents/
+AGENTS.md
+
+# Internal Development & Planning Docs
+docs_internal/
