@@ -1,0 +1,393 @@
+:root {
+  /* Graphite neutral ramp & hairlines (tokens.md) */
+  --bg: #141415;
+  --surface: #18181b;
+  --border: rgba(237, 237, 237, 0.08);
+  --text: #ededed;
+  --text-muted: #a1a1a6;
+  --text-subtle: #686870;
+  --kbd-bg: rgba(237, 237, 237, 0.06);
+  --kbd-border: rgba(237, 237, 237, 0.12);
+  --hover-bg: rgba(237, 237, 237, 0.04);
+  --selected-bg: rgba(237, 237, 237, 0.08);
+  --selected-border: rgba(237, 237, 237, 0.14);
+  --active-tab-bg: rgba(237, 237, 237, 0.035);
+  --active-tab-border: rgba(237, 237, 237, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+body {
+  width: 800px;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+  overscroll-behavior: none;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+
+/* 検索バーエリア (4px grid: padding 12px 16px, gap 12px) */
+.header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface);
+}
+
+.search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-muted);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0;
+  caret-color: transparent;
+}
+
+.search-input.active {
+  color: var(--text);
+  caret-color: var(--text);
+}
+
+.search-input::placeholder {
+  color: var(--text-subtle);
+}
+
+.mode-tag {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  transition: background-color 0.1s ease, border-color 0.1s ease, color 0.1s ease;
+}
+
+.mode-jump {
+  background: rgba(237, 237, 237, 0.05);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.mode-search {
+  background: rgba(237, 237, 237, 0.12);
+  color: var(--text);
+  border: 1px solid rgba(237, 237, 237, 0.2);
+}
+
+/* 一覧共通（9スロット タブ一覧 ＆ 検索候補一覧） */
+.slot-list,
+.suggestion-list {
+  list-style: none;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 480px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.suggestion-list {
+  display: none;
+}
+
+.slot-list::-webkit-scrollbar,
+.suggestion-list::-webkit-scrollbar {
+  display: none;
+}
+
+.slot-item,
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 40px;
+  padding: 0 16px 0 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  border: 1px solid transparent;
+  transition: background-color 0.1s ease, border-color 0.1s ease;
+}
+
+.slot-item:hover,
+.suggestion-item:hover {
+  background: var(--hover-bg);
+  border-color: rgba(237, 237, 237, 0.06);
+}
+
+.slot-item.is-active-tab {
+  background: var(--active-tab-bg);
+  border-color: var(--active-tab-border);
+}
+
+.slot-item.selected,
+.suggestion-item.selected {
+  background: var(--selected-bg);
+  border-color: var(--selected-border);
+}
+
+.slot-item.is-active-tab.selected {
+  border-color: rgba(237, 237, 237, 0.28);
+  background: var(--selected-bg);
+}
+
+.slot-item.is-split-selected {
+  background: rgba(237, 237, 237, 0.1);
+  border-color: rgba(237, 237, 237, 0.28);
+  box-shadow: inset 0 0 0 1px rgba(237, 237, 237, 0.16);
+}
+
+.slot-item.is-ghost-tab > :not(.group-indicator) {
+  opacity: 0.45;
+}
+
+.slot-item.is-ghost-tab:hover > :not(.group-indicator),
+.slot-item.is-ghost-tab.selected > :not(.group-indicator) {
+  opacity: 0.85;
+}
+
+.slot-split-badge {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--bg);
+  background: var(--text);
+  padding: 1px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+
+.slot-ghost-badge {
+  background: rgba(237, 237, 237, 0.15);
+  color: var(--text-muted);
+  border: 1px solid rgba(237, 237, 237, 0.2);
+}
+
+/* タブグループの連続カラーバー (border 1px + gap 4px + border 1px = 6px を隙間なくシームレスに接続) */
+.group-indicator {
+  position: absolute;
+  left: 6px;
+  width: 2px;
+  z-index: 2;
+}
+
+.group-single { top: 6px; bottom: 6px; border-radius: 1px; }
+.group-start { top: 6px; bottom: -3px; border-radius: 1px 1px 0 0; }
+.group-middle { top: -3px; bottom: -3px; border-radius: 0; }
+.group-end { top: -3px; bottom: 6px; border-radius: 0 0 1px 1px; }
+
+/* 1〜9 キーキャップ (nested radius: 6px - 2px = 4px, HUD Monospace) */
+.slot-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: var(--kbd-bg);
+  border: 1px solid var(--kbd-border);
+  border-radius: 4px;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  flex-shrink: 0;
+}
+
+.slot-item.selected .slot-key {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--bg);
+}
+
+.slot-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.slot-icon-svg,
+.suggest-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--text-muted);
+}
+
+.slot-title,
+.suggest-text {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text);
+}
+
+.slot-title {
+  flex: 1;
+}
+
+.slot-audible {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  flex-shrink: 0;
+}
+
+.slot-audible svg {
+  width: 16px;
+  height: 16px;
+}
+
+.slot-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+}
+
+.slot-item:hover .slot-actions,
+.slot-actions:has(.is-copied) {
+  opacity: 1;
+}
+
+.slot-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.1s ease, border-color 0.1s ease, color 0.1s ease;
+}
+
+.slot-action-btn:hover {
+  background: rgba(237, 237, 237, 0.08);
+  border-color: rgba(237, 237, 237, 0.14);
+  color: var(--text);
+}
+
+.slot-action-btn.is-copied {
+  background: rgba(237, 237, 237, 0.12);
+  border-color: rgba(237, 237, 237, 0.2);
+  color: var(--text);
+}
+
+.slot-action-btn svg {
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+}
+
+/* 検索候補＆履歴一覧固有 */
+.suggest-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.suggest-text {
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+.suggest-domain {
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--text-subtle);
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.suggest-badge {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  background: rgba(237, 237, 237, 0.05);
+  border: 1px solid var(--border);
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.badge-tab {
+  background: rgba(237, 237, 237, 0.1);
+  color: var(--text);
+  border-color: rgba(237, 237, 237, 0.18);
+  font-weight: 500;
+}
+
+/* フッター ＆ ページネーション */
+.footer {
+  padding: 12px 16px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.shortcuts-guide {
+  display: flex;
+  gap: 16px;
+}
+
+.shortcuts-guide span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pagination {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+}
+
+kbd {
+  background: var(--kbd-bg);
+  border: 1px solid var(--kbd-border);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 11px;
+  color: var(--text);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}

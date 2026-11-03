@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Barless</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+
+  <!-- 検索 / 状態ヘッダー -->
+  <div class="header" role="search">
+    <input 
+      type="text" 
+      id="searchInput" 
+      class="search-input" 
+      placeholder="開いているタブ、検索ワード、URL、履歴を検索..." 
+      autocomplete="off"
+      role="combobox"
+      aria-expanded="false"
+      aria-autocomplete="list"
+      aria-controls="suggestionList"
+      aria-label="タブ検索とURL入力"
+      autofocus
+    />
+    <div id="modeTag" class="mode-tag mode-jump" aria-live="polite">Jump</div>
+  </div>
+
+  <!-- 9スロット タブ一覧（未入力時に表示） -->
+  <ul class="slot-list" id="slotList" role="listbox" aria-label="開いているタブ一覧"></ul>
+
+  <!-- 検索候補＆履歴一覧（入力中に表示） -->
+  <ul class="suggestion-list" id="suggestionList" role="listbox" aria-label="検索候補と履歴"></ul>
+
+  <!-- フッター & 左右ページネーション -->
+  <div class="footer">
+    <div class="shortcuts-guide" id="shortcutsGuide">
+      <span><kbd>1</kbd>-<kbd>9</kbd> 移動</span>
+      <span><kbd>←</kbd><kbd>→</kbd> ページ</span>
+      <span><kbd>Tab</kbd> 検索切替</span>
+      <span><kbd>?</kbd> ヘルプ</span>
+    </div>
+
+    <div class="pagination" id="pagination">
+      <span id="pageInfo">1 / 1</span>
+    </div>
+  </div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
