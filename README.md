@@ -15,6 +15,11 @@ Chrome や Brave でタブが増えた際、開いているタブを探す手間
 
 Arc Browser に着想を得た統合パレットを画面中央に呼び出し、タブ移動とWeb検索を同じ操作で行えます。ショートカットキーによる素早い画面分割にも対応します。
 
+<p align="center">
+  <img src="images/before-after.gif" alt="Before / After: 上部バーの排除と中央パレットへの集約" width="800"><br>
+  <sub>アドレスバーとタブバーをパレットに集約</sub>
+</p>
+
 ---
 
 ## 主な機能
